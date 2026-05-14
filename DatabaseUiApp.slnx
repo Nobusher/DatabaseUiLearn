@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="DatabaseUiApp.Android/DatabaseUiApp.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="DatabaseUiApp.Browser/DatabaseUiApp.Browser.csproj" />
+  <Project Path="DatabaseUiApp.Desktop/DatabaseUiApp.Desktop.csproj" />
+  <Project Path="DatabaseUiApp.iOS/DatabaseUiApp.iOS.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="DatabaseUiApp/DatabaseUiApp.csproj" />
+</Solution>

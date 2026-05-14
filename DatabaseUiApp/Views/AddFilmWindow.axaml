@@ -1,0 +1,39 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:DatabaseUiApp.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="DatabaseUiApp.AddFilmWindow"
+        x:DataType="vm:AddFilmViewModel"
+        Title="AddFilmWindow">
+ <Grid>
+	 <StackPanel Margin="16" Spacing="0">
+		 <TextBlock Text="Title"/>
+         <TextBox Text="{Binding Title}"/>
+
+         <TextBlock Text="Year"/>
+         <TextBox Text="{Binding Year}"/>
+
+         <TextBlock Text="Duration"/>
+         <TextBox Text="{Binding Duration}"/>
+
+         <TextBlock Text="Director" />
+         <ComboBox ItemsSource="{Binding Directors}"
+                   SelectedItem="{Binding SelectedDirector}"
+                   DisplayMemberBinding="{Binding Name}"
+                   HorizontalAlignment="Stretch"
+                   />
+         <TextBlock Text="Genre" />
+         <ComboBox ItemsSource="{Binding Genres}"
+                   SelectedItem="{Binding SelectedGenre}"
+                   DisplayMemberBinding="{Binding Name}"
+                   HorizontalAlignment="Stretch"
+                   />
+         <Button Content="Save"
+                 Command="{Binding SaveCommand}"
+                 HorizontalAlignment="Right"
+                 Margin="0,16,0,0"/>
+     </StackPanel>
+ </Grid>
+</Window>
