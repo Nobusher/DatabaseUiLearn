@@ -12,10 +12,17 @@ namespace DatabaseUiApp.ViewModels
     public class MainViewModel : ViewModelBase
     {
         public ObservableCollection<Film>? Films { get; set; } = new();
+
+        public ObservableCollection<Director>?
+            Directors { get; set; } = new();
+
         private bool _isLoading = false;
 
+        public ReactiveCommand<Unit, Unit>
+            OpenAddDirectorCommand { get; set;}
+
         public ReactiveCommand<Unit,Unit> 
-            OpenAddFilmCommand { get; set; }
+            OpenAddFilmCommand { get; set;}
 
         private Film? _selectedFilm;
 
@@ -36,12 +43,23 @@ namespace DatabaseUiApp.ViewModels
             OpenAddFilmCommand
                 = ReactiveCommand.Create(OpenAddFilm);
            _ = LoadFilms();
+
+            OpenAddDirectorCommand 
+                = ReactiveCommand.Create(OpenAddDirector);
         }
         private void OpenAddFilm() 
         {
             var window = new AddFilmWindow();
             window.DataContext = new AddFilmViewModel(Films!);
             window.Show();
+        }
+        private void OpenAddDirector()
+        {
+            var window = new AddDirectorWindow();
+            window.DataContext 
+                = new AddDirectorViewModel(Directors!);
+            window.Show();
+
         }
         private async Task LoadFilms() 
         {
@@ -55,6 +73,12 @@ namespace DatabaseUiApp.ViewModels
                 .Include(f=>f.Director)
                 .Include(f=>f.Genre)
                 .ToListAsync();
+            var directors = await db.Directors
+                .ToListAsync();
+            foreach (var director in directors) 
+            {
+                Directors?.Add(director);
+            }
             foreach (var film in films) 
             {
                 Films?.Add(film);
@@ -136,6 +160,47 @@ namespace DatabaseUiApp.ViewModels
                 GenreId = SelectedGenre.Id,
             });
             await db.SaveChangesAsync();
+        }
+    }
+    public class AddDirectorViewModel : ViewModelBase 
+    {
+        private readonly ObservableCollection<Director> _directors;
+
+        private string _name = "";
+        public string Name
+        {
+            get => _name;
+            set=>this.RaiseAndSetIfChanged(ref _name, value);
+        }
+        private string _country = "";
+        public string Country
+        {
+            get => _country;
+            set => this.RaiseAndSetIfChanged(ref _country, value);
+        }
+        public ReactiveCommand<Unit, Unit> SaveCommand { get; }
+
+        public AddDirectorViewModel
+            (ObservableCollection<Director> directors)
+        {
+            _directors = directors;
+            SaveCommand = ReactiveCommand.CreateFromTask(SaveAsync);
+        }
+
+        private async Task SaveAsync() 
+        {
+            if (string.IsNullOrWhiteSpace(Name)) return;
+
+            using var db = new CinemaContext();
+            var director = new Director 
+            {
+                Name = Name,
+                Country = Country,
+            };
+            db.Directors.Add(director);
+            await db.SaveChangesAsync();
+
+            _directors.Add(director);
         }
     }
 }

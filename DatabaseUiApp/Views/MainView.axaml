@@ -18,12 +18,19 @@
                   Height="15" 
                   IsVisible="{Binding IsLoading}"
                   IsIndeterminate="True"/>
-
-     <Button Grid.Row="1" Grid.Column="0"
+     <StackPanel Grid.Row="1" Grid.Column="0">
+		 <Button 
              Content="+ Add movie"
              Margin="8"
              Command="{Binding OpenAddFilmCommand}"
              />
+     <Button 
+             Content="+ Add Director"
+             Margin="8"
+             Command="{Binding OpenAddDirectorCommand}"
+             />
+     </StackPanel>
+     
 
 	 <ListBox Grid.Row="2" Grid.Column="0" 
               ItemsSource="{Binding Films}"
